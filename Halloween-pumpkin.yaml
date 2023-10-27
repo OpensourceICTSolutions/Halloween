@@ -1,0 +1,25 @@
+zabbix_export:
+  version: '6.4'
+  host_groups:
+    - uuid: 88dc02778c2c49d58760e4f4a9f5fc07
+      name: Halloween
+  hosts:
+    - host: 'Halloween Pumpkin'
+      name: 'Halloween Pumpkin'
+      status: ENABLED
+      groups:
+        - name: Halloween
+      items:
+        - name: Smile
+          type: SCRIPT
+          key: smile
+          delay: 1s
+          params: 'return 1'
+          triggers:
+            - expression: |
+                ({TRIGGER.VALUE}=0 and last(/Halloween Pumpkin/smile)=1)
+                or
+                ({TRIGGER.VALUE}=1 and last(/Halloween Pumpkin/smile)=0)
+              name: 'Smile toggle'
+              priority: DISASTER
+      inventory_mode: DISABLED
